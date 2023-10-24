@@ -10,6 +10,7 @@ public class TrybankLib
     //2 -> Senha
     //3 -> Saldo
     public int[,] Bank;
+
     public int registeredAccounts;
     private int maxAccounts = 50;
 
@@ -42,7 +43,7 @@ public class TrybankLib
     // 4. Construa a funcionalidade de checar o saldo
     public int CheckBalance()
     {
-        throw new NotImplementedException();   
+        throw new NotImplementedException();
     }
 
     // 5. Construa a funcionalidade de depositar dinheiro
@@ -63,5 +64,5 @@ public class TrybankLib
         throw new NotImplementedException();
     }
 
-   
+
 }
