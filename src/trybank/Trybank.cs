@@ -30,6 +30,12 @@ public class TrybankLib
 
     }
 
+    public struct GetAccountResult
+    {
+        public int[] Account;
+        public int Index;
+    }
+
     // 1. Construa a funcionalidade de cadastrar novas contas
     public void RegisterAccount(int number, int agency, int pass)
     {
@@ -48,10 +54,51 @@ public class TrybankLib
         }
     }
 
+
+
+    private void CheckIfDisponibleLogin()
+    {
+        if (Logged)
+            throw new AccessViolationException("Usuário já está logado");
+    }
+
+    private GetAccountResult GetAccountByNumberAndAgency(int number, int agency)
+    {
+        for (int a = 0; a < registeredAccounts; a++)
+        {
+            if (Bank[a, 0] == number && Bank[a, 1] == agency)
+                return new GetAccountResult
+                {
+                    Account = Enumerable.Range(0, 4).Select(i => Bank[a, i]).ToArray(),
+                    Index = a
+                };
+        }
+        throw new ArgumentException("Agência + Conta não encontrada");
+    }
+
     // 2. Construa a funcionalidade de fazer Login
     public void Login(int number, int agency, int pass)
     {
-        throw new NotImplementedException();
+        try
+        {
+            CheckIfDisponibleLogin();
+            var accountResult = GetAccountByNumberAndAgency(number, agency);
+
+            if (accountResult.Account[2] != pass)
+                throw new ArgumentException("Senha incorreta");
+
+            Logged = !Logged;
+            loggedUser = accountResult.Index;
+        }
+        catch (ArgumentException ex)
+        {
+            throw (ex);
+        }
+        catch (AccessViolationException ex)
+        {
+            throw (ex);
+        }
+
     }
 
     // 3. Construa a funcionalidade de fazer Logout
