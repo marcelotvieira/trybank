@@ -58,6 +58,7 @@ public class TrybankLib
         if (!Logged)
             throw new AccessViolationException("Usuário não está logado");
     }
+
     private void CheckIfDisponibleLogin()
     {
         if (Logged)
@@ -76,6 +77,12 @@ public class TrybankLib
                 };
         }
         throw new ArgumentException("Agência + Conta não encontrada");
+    }
+
+    private void CheckSuficientBalance(int value)
+    {
+        if (Bank[loggedUser, 3] < value)
+            throw new InvalidOperationException("Saldo insuficiente");
     }
 
     public void Login(int number, int agency, int pass)
@@ -99,7 +106,6 @@ public class TrybankLib
         {
             throw (ex);
         }
-
     }
 
     public void Logout()
@@ -124,15 +130,17 @@ public class TrybankLib
     public void Withdraw(int value)
     {
         CheckLogin();
-        if (Bank[loggedUser, 3] < value)
-            throw new InvalidOperationException("Saldo insuficiente");
+        CheckSuficientBalance(value);
         Bank[loggedUser, 3] -= value;
     }
 
-    // 7. Construa a funcionalidade de transferir dinheiro entre contas
     public void Transfer(int destinationNumber, int destinationAgency, int value)
     {
-        throw new NotImplementedException();
+        CheckLogin();
+        CheckSuficientBalance(value);
+        Withdraw(value);
+        int target = GetAccountByNumberAndAgency(destinationNumber, destinationAgency).Index;
+        Bank[target, 3] += value;
     }
 
 
