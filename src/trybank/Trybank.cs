@@ -36,7 +36,6 @@ public class TrybankLib
         public int Index;
     }
 
-    // 1. Construa a funcionalidade de cadastrar novas contas
     public void RegisterAccount(int number, int agency, int pass)
     {
         try
@@ -53,7 +52,6 @@ public class TrybankLib
             throw (ex);
         }
     }
-
 
 
     private void CheckIfDisponibleLogin()
@@ -76,7 +74,6 @@ public class TrybankLib
         throw new ArgumentException("Agência + Conta não encontrada");
     }
 
-    // 2. Construa a funcionalidade de fazer Login
     public void Login(int number, int agency, int pass)
     {
         try
@@ -101,10 +98,12 @@ public class TrybankLib
 
     }
 
-    // 3. Construa a funcionalidade de fazer Logout
     public void Logout()
     {
-        throw new NotImplementedException();
+        if (!Logged)
+            throw new AccessViolationException("Usuário não está logado");
+        Logged = !Logged;
+        loggedUser = -99;
     }
 
     // 4. Construa a funcionalidade de checar o saldo
